@@ -6,15 +6,17 @@
 # print(device)
 import time
 import requests
+import flwr as fl
 import json
 
 print("App started")
 inform_FLAG: bool = False
 inform_SE: str = 'http://localhost:8000/FLSe/FLSeReady'
 inform_Payload = {
-    'S3_bucket': 'ccl-fl-demo-model',
-    'S3_key': 'model.h5',  # 모델 가중치 파일 이름
-    'FLSeReady': False
+  #  형식
+  #  'S3_bucket': 'ccl-fl-demo-model',
+  #  'S3_key': 'model.h5',  # 모델 가중치 파일 이름
+  #  'FLSeReady': False
 }
 if __name__ == '__main__':
     while ~inform_FLAG:
@@ -27,8 +29,9 @@ if __name__ == '__main__':
         time.sleep(5)
     ##
     #서버를 시작
+    fl.server.start_server(config={"num_rounds": 3})
     ##
-    time.sleep(100)
+    #time.sleep(100)
     while ~inform_FLAG:
         r = requests.put(inform_SE, params={'i': 'false'})
         if r.status_code == 200:

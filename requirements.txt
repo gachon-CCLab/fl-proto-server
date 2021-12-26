@@ -4,4 +4,3 @@ fastapi
 uvicorn[standard]
 requests
 boto3
-json
