@@ -11,7 +11,7 @@ import json
 
 print("App started")
 inform_FLAG: bool = False
-inform_SE: str = 'http://localhost:8000/FLSe/FLSeReady'
+inform_SE: str = 'http://10.152.183.186:8000/FLSe/FLSeReady'
 inform_Payload = {
   #  형식
   #  'S3_bucket': 'ccl-fl-demo-model',
