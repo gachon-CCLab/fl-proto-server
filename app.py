@@ -8,6 +8,26 @@ import time
 import requests
 import flwr as fl
 import json
+import numpy as np
+class SaveModelStrategy(fl.server.strategy.FedAvg):
+    def aggregate_fit(
+        self,
+        rnd,
+        results,
+        failures,
+    ):
+        aggregated_weights = super().aggregate_fit(rnd, results, failures)
+        if aggregated_weights is not None:
+            # Save aggregated_weights
+            print(f"Saving round {rnd} aggregated_weights...")
+            np.savez(f"round-{rnd}-weights.npz", *aggregated_weights)
+        return aggregated_weights
+
+# Create strategy and run server
+strategy = SaveModelStrategy(
+    # (same arguments as FedAvg here)
+)
+
 
 print("App started")
 inform_FLAG: bool = False
@@ -29,7 +49,7 @@ if __name__ == '__main__':
         time.sleep(5)
     ##
     #서버를 시작
-    fl.server.start_server(config={"num_rounds": 3})
+    fl.server.start_server(strategy=strategy,config={"num_rounds": 10})
     ##
     #time.sleep(100)
     while ~inform_FLAG:
