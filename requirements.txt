@@ -5,3 +5,6 @@ uvicorn[standard]
 requests
 boto3
 numpy
+tensorflow
+wget
+keras
