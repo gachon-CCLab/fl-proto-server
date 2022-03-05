@@ -7,6 +7,8 @@ import time
 
 import requests
 import flwr as fl
+from flwr import common
+from flwr.server import strategy
 import wget
 import json
 from custom_server.advanced_server import Advanced_Server
@@ -74,10 +76,10 @@ def get_eval_fn(model):
 
     # Load data and model here to avoid the overhead of doing it in `evaluate` itself
     #(x_train, y_train), _ = tf.keras.datasets.cifar10.load_data()
-#
+
     ## Use the last 5k training examples as a validation set
     #x_val, y_val = x_train[45000:50000], y_train[45000:50000]
-#
+
     mnist = tf.keras.datasets.mnist
     (x_train, y_train), (x_val, y_val) = mnist.load_data()
     x_val=x_val/255.0
@@ -86,6 +88,8 @@ def get_eval_fn(model):
         weights: fl.common.Weights,
     ) -> Optional[Tuple[float, Dict[str, fl.common.Scalar]]]:
         model.set_weights(weights)  # Update model with the latest parameters
+        model.compile("adam", "sparse_categorical_crossentropy", metrics=["accuracy"])
+
         loss, accuracy = model.evaluate(x_val, y_val)
         return loss, {"accuracy": accuracy}
 
@@ -138,7 +142,7 @@ if __name__ == '__main__':
         url = "https://" + inform_Payload['S3_bucket'] + ".s3.ap-northeast-2.amazonaws.com/" + inform_Payload['S3_key']
         request = wget.download( url, out='./model.h5')
         model = keras.models.load_model('./model.h5')
-
+        weights = model.get_weights()
         logging.getLogger('flower')
         strategy = fl.server.strategy.FedAvg(
             fraction_fit=0.3,
@@ -149,11 +153,10 @@ if __name__ == '__main__':
             eval_fn=get_eval_fn(model),
             on_fit_config_fn=fit_config,
             on_evaluate_config_fn=evaluate_config,
-            initial_parameters=fl.common.weights_to_parameters(model.get_weights()),
+            initial_parameters=fl.common.weights_to_parameters(weights),
         )
-        client_manager = fl.server.SimpleClientManager()
-        flserver = Advanced_Server(client_manager=client_manager, strategy=strategy)
-        fl.server.start_server(server=flserver, config={"num_rounds": 10})
+        #fl.server.start_server(server_address="localhost:8080",strategy=strategy, config={"num_rounds": 10})
+        fl.server.start_server("0.0.0.0:8080", config={"num_rounds": 3},strategy=strategy)
         ##
         #time.sleep(10)
     #except Exception as e:
