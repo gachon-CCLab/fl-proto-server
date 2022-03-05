@@ -145,7 +145,7 @@ if __name__ == '__main__':
             fraction_eval=0.2,
             min_fit_clients=3,
             min_eval_clients=2,
-            min_available_clients=10,
+            min_available_clients=4,
             eval_fn=get_eval_fn(model),
             on_fit_config_fn=fit_config,
             on_evaluate_config_fn=evaluate_config,
