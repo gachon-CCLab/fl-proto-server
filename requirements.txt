@@ -1,5 +1,5 @@
 pandas
-flwr==0.18.0
+flwr==0.17.0
 fastapi
 uvicorn[standard]
 requests
@@ -8,3 +8,4 @@ numpy
 tensorflow
 wget
 keras
+wandb

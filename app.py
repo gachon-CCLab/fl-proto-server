@@ -1,5 +1,7 @@
 import tensorflow as tf
 from typing import Any, Callable, Dict, List, Optional, Tuple
+
+import wandb
 from tensorflow import keras
 
 import logging
@@ -70,6 +72,9 @@ from custom_server.advanced_server import Advanced_Server
 
 
 # Create strategy and run server
+wandb.login(key='9b027b5dd31cac141867a24f926dcf8a96daa742')
+wandb.init(entity='hoo0681', project='flwr',config={"epochs": 4, "batch_size": 32,"val_steps": 4})
+
 
 def get_eval_fn(model):
     """Return an evaluation function for server-side evaluation."""
@@ -91,6 +96,7 @@ def get_eval_fn(model):
         model.compile("adam", "sparse_categorical_crossentropy", metrics=["accuracy"])
 
         loss, accuracy = model.evaluate(x_val, y_val)
+        wandb.log({'loss':loss,"accuracy": accuracy})
         return loss, {"accuracy": accuracy}
 
     return evaluate
@@ -105,6 +111,8 @@ def fit_config(rnd: int):
         "batch_size": 32,
         "local_epochs": 1 if rnd < 2 else 2,
     }
+    wandb.config.update({"epochs": 1 if rnd < 2 else 2, "batch_size": 32})
+
     return config
 
 
@@ -115,6 +123,8 @@ def evaluate_config(rnd: int):
     evaluation steps.
     """
     val_steps = 5 if rnd < 4 else 10
+    wandb.config.update({"val_steps": val_steps})
+
     return {"val_steps": val_steps}
 
 
@@ -163,6 +173,7 @@ if __name__ == '__main__':
     #    print(e)
     finally:
         r = requests.put(inform_SE + 'FLSeReady', params={'i': 'false'})
+        wandb.finish()
     print(inform_Payload)
 # import flwr as fl
 # SERVER_ID = 0
