@@ -136,8 +136,8 @@ if __name__ == '__main__':
         #
         # 서버를 시작
         url = "https://" + inform_Payload['S3_bucket'] + ".s3.ap-northeast-2.amazonaws.com/" + inform_Payload['S3_key']
-        request = wget.download( url, out='/model/model.h5')
-        model = keras.models.load_model('/model/model.h5')
+        request = wget.download( url, out='./model.h5')
+        model = keras.models.load_model('./model.h5')
 
         logging.getLogger('flower')
         strategy = fl.server.strategy.FedAvg(
