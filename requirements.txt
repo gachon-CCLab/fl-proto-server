@@ -1,5 +1,5 @@
 pandas
-flwr
+flwr==0.18.0
 fastapi
 uvicorn[standard]
 requests

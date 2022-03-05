@@ -147,9 +147,9 @@ if __name__ == '__main__':
         strategy = fl.server.strategy.FedAvg(
             fraction_fit=0.3,
             fraction_eval=0.2,
-            min_fit_clients=3,
-            min_eval_clients=2,
-            min_available_clients=4,
+            min_fit_clients=1,
+            min_eval_clients=1,
+            min_available_clients=1,
             eval_fn=get_eval_fn(model),
             on_fit_config_fn=fit_config,
             on_evaluate_config_fn=evaluate_config,
