@@ -111,7 +111,7 @@ def fit_config(rnd: int):
         "batch_size": 32,
         "local_epochs": 1 if rnd < 2 else 2,
     }
-    wandb.config.update({"epochs": 1 if rnd < 2 else 2, "batch_size": 32})
+    wandb.config.update({"local_epochs": 1 if rnd < 2 else 2, "batch_size": 32})
 
     return config
 
