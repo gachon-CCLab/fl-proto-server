@@ -111,7 +111,7 @@ def fit_config(rnd: int):
         "batch_size": 32,
         "local_epochs": 1 if rnd < 2 else 2,
     }
-    wandb.config.update({"local_epochs": 1 if rnd < 2 else 2, "batch_size": 32})
+    wandb.config.update({"local_epochs": 1 if rnd < 2 else 2, "batch_size": 32},allow_val_change=True)
 
     return config
 
@@ -123,7 +123,7 @@ def evaluate_config(rnd: int):
     evaluation steps.
     """
     val_steps = 5 if rnd < 4 else 10
-    wandb.config.update({"val_steps": val_steps})
+    wandb.config.update({"val_steps": val_steps},allow_val_change=True)
 
     return {"val_steps": val_steps}
 
