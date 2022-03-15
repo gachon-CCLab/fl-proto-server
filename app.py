@@ -13,6 +13,8 @@ from flwr import common
 from flwr.server import strategy
 import wget
 import json
+import os
+import boto3
 from custom_server.advanced_server import Advanced_Server
 
 
@@ -75,6 +77,19 @@ from custom_server.advanced_server import Advanced_Server
 wandb.login(key='9b027b5dd31cac141867a24f926dcf8a96daa742')
 wandb.init(entity='hoo0681', project='flwr',config={"epochs": 4, "batch_size": 32,"val_steps": 4})
 
+def upload_lastest_model():
+    if os.environ.get('ENV') is not None:
+        res = requests.get('http://10.152.183.186:8000' + '/FLSe/info')  # 서버측 manager
+        S3_info = res.json()['Server_Status']
+        ACCESS_KEY_ID = os.environ.get('ACCESS_KEY_ID')
+        ACCESS_SECRET_KEY = os.environ.get('ACCESS_SECRET_KEY')
+        BUCKET_NAME = os.environ.get('BUCKET_NAME')
+        s3_client = boto3.client('s3', aws_access_key_id=ACCESS_KEY_ID,
+                                 aws_secret_access_key=ACCESS_SECRET_KEY)
+        response = s3_client.upload_file(S3_info['S3_key'], BUCKET_NAME, S3_info['S3_key'])
+        print('upload')
+    else:
+        pass
 
 def get_eval_fn(model):
     """Return an evaluation function for server-side evaluation."""
@@ -94,8 +109,9 @@ def get_eval_fn(model):
     ) -> Optional[Tuple[float, Dict[str, fl.common.Scalar]]]:
         model.set_weights(weights)  # Update model with the latest parameters
         model.compile("adam", "sparse_categorical_crossentropy", metrics=["accuracy"])
-
         loss, accuracy = model.evaluate(x_val, y_val)
+        model.save("./model.h5")
+        upload_lastest_model()
         wandb.log({'loss':loss,"accuracy": accuracy})
         return loss, {"accuracy": accuracy}
 
