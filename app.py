@@ -79,7 +79,7 @@ wandb.init(entity='hoo0681', project='flwr',config={"epochs": 4, "batch_size": 3
 
 def upload_lastest_model():
     if os.environ.get('ENV') is not None:
-        res = requests.get('http://10.152.183.186:8000' + '/FLSe/info')  # 서버측 manager
+        res = requests.get('http://10.1.196.109:8000' + '/FLSe/info')  # 서버측 manager  # 10.152.183.186
         S3_info = res.json()['Server_Status']
         ACCESS_KEY_ID = os.environ.get('ACCESS_KEY_ID')
         ACCESS_SECRET_KEY = os.environ.get('ACCESS_SECRET_KEY')
@@ -147,7 +147,7 @@ def evaluate_config(rnd: int):
 if __name__ == '__main__':
 
     print("App started")
-    inform_SE: str = 'http://10.152.183.186:8000/FLSe/'#10.152.183.186
+    inform_SE: str = 'http://10.1.196.109:8000/FLSe/'#10.152.183.186
     inform_Payload = {
         #  형식
         'S3_bucket': 'ccl-fl-demo-model',
