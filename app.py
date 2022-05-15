@@ -79,7 +79,7 @@ wandb.init(entity='hoo0681', project='flwr',config={"epochs": 4, "batch_size": 3
 
 def upload_lastest_model():
     if os.environ.get('ENV') is not None:
-        res = requests.get('http://10.1.196.109:8000' + '/FLSe/info')  # 서버측 manager  # 10.152.183.186
+        res = requests.get('http://10.152.183.18:8000' + '/FLSe/info')  # 서버측 manager  # 10.152.183.186
         S3_info = res.json()['Server_Status']
         ACCESS_KEY_ID = os.environ.get('ACCESS_KEY_ID')
         ACCESS_SECRET_KEY = os.environ.get('ACCESS_SECRET_KEY')
