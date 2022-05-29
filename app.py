@@ -74,8 +74,8 @@ from custom_server.advanced_server import Advanced_Server
 
 
 # Create strategy and run server
-wandb.login(key='9b027b5dd31cac141867a24f926dcf8a96daa742')
-wandb.init(entity='hoo0681', project='flwr',config={"epochs": 4, "batch_size": 32,"val_steps": 4})
+wandb.login(key='fa67dec671c4384afbb282bd683f98d443c6b1d1')
+wandb.init(entity='ccl-lab', project='ccl-proto-server',config={"epochs": 4, "batch_size": 32,"val_steps": 4})
 
 def upload_lastest_model():
     if os.environ.get('ENV') is not None:
