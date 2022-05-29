@@ -147,7 +147,7 @@ def evaluate_config(rnd: int):
 if __name__ == '__main__':
 
     print("App started")
-    inform_SE: str = 'http://10.1.196.109:8000/FLSe/'#10.152.183.186
+    inform_SE: str = 'http://10.152.183.18:8000/FLSe/'#10.152.183.186
     inform_Payload = {
         #  형식
         'S3_bucket': 'ccl-fl-demo-model',
